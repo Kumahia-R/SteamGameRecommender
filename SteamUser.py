@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXX'  # key to access any of the steam APIs
+API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXX'  # key to access any of the steam APIs
 # Following URLs are the Steam API URLs
 GetFriendsURL = 'https://api.steampowered.com/ISteamUser/GetFriendList/v1/'  # Returns user's friend list and their information, we're specifically looking for their steamids
 GotOwnedURL = 'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/'  # Returns user's owned games
@@ -55,6 +55,14 @@ class SteamUser:
             print(f'{friend_index + 1}. {i.get_profile_name()}')
             friend_index += 1
 
+    def tags_user_plays(self):
+        # method to compile all the tags of the games that the user has played
+        all_tags = set()
+        for i in self.get_user_library():
+            # loop will add the tags of each game to all_tags excluding duplicates
+            all_tags = all_tags.union(i.get_game_tags())
+        return all_tags
+
 
 class Game:
     # Game class, will have all the necessary info for a game so it can be readily accessed
@@ -76,12 +84,12 @@ class Game:
         soup = BeautifulSoup(page_html_text, 'html.parser')  # turns the HTML into an object that makes parsing through it easier
         tag_html = soup.find("div", attrs={"class": "glance_tags popular_tags"})  # gets the section of the HTML that contains the game's tags
         if tag_html == None:
-            return
+            return {}
         game_tags = tag_html.find_all("a")  # further filters the HTML to make getting only the tags easier
-        tag_list = []
+        tag_list = set()
         for i in game_tags:
             # adds the game's tags as an str to the list tag_list
-            tag_list.append(i.text.replace('\n', ' ').strip())  # there's lots of whitespace around the actual tage name so this is to exclude it
+            tag_list.add(i.text.replace('\n', ' ').strip())  # there's lots of whitespace around the actual tage name so this is to exclude it
         return tag_list
 
     def __eq__(self, other):  # compares the appids of 2 Game objects
