@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXX'  # key to access any of the steam APIs
+API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXX'  # key to access any of the steam APIs
 # Following URLs are the Steam API URLs
 GetFriendsURL = 'https://api.steampowered.com/ISteamUser/GetFriendList/v1/'  # Returns user's friend list and their information, we're specifically looking for their steamids
 GotOwnedURL = 'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/'  # Returns user's owned games
